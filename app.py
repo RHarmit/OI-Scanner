@@ -144,7 +144,18 @@ if flt.empty:
     st.stop()
 
 st.subheader("Top candidates")
-top_n = st.slider("Show top N", 5, min(50, len(flt)), min(15, len(flt)))
+max_top_n = min(50, len(flt))
+if max_top_n == 1:
+    top_n = 1
+    st.caption("Showing the only stock matching the current filters.")
+else:
+    top_n = st.slider(
+        "Show top N",
+        min_value=1,
+        max_value=max_top_n,
+        value=min(15, max_top_n),
+        step=1,
+    )
 
 show = flt.head(top_n).copy()
 show["Avg Cash Value ₹Cr"] = show["avg_traded_value_20"] / 1e7
